@@ -21,13 +21,15 @@ class node{
         newnode->next=NULL;
         if(head==NULL){
             head=newnode;
+            head->next=head;
         }
         else{
             node* temp=head;
-            while(temp->next!=NULL){
+            while(temp->next!=head){
                 temp=temp->next;
             }
             temp->next=newnode;
+            newnode->next=head;
         }
     return head;
     }
@@ -36,9 +38,15 @@ class node{
         node* newnode=new node(data);
         if(head==NULL){
             head=newnode;
+            head->next=head;
         }
         else{
             newnode->next=head;
+            node* temp=head;
+            while(temp->next!=head){
+                temp=temp->next;
+            }
+            temp->next=newnode;
             head=newnode;
         }
         return head;
@@ -51,10 +59,11 @@ class node{
         }
         else{
             node* temp=head;
-            while(temp->next!=NULL){
+            while(temp->next!=head){
                 temp=temp->next;
             }
             temp->next=newnode;
+            newnode->next=head;
         }
         return head;
     }
@@ -81,9 +90,14 @@ class node{
         if(head==NULL)
             return NULL;
         else{
-            node*temp =head;
+            node* temp =head;
+            while(temp->next!=head){
+                temp=temp->next;
+            }
+            node* temp1=head;
             head=head->next;
-            free(temp);
+            temp->next=head;
+            free(temp1);
         }    
         return head;
     }
@@ -93,12 +107,11 @@ class node{
             return NULL;
         else{
             node* temp =head;
-
-              while(temp->next->next!=NULL){
+              while(temp->next->next!=head){
                 temp=temp->next;
             }
             node* prev=temp->next;
-            temp->next=NULL;
+            temp->next=head;
             free(prev);
         }    
         return head;
@@ -123,10 +136,11 @@ class node{
     }
     void print(node* head){
         node* temp=head;
-        while(temp!=NULL){
+        while(temp->next!=head){
             cout<<temp->data<<" ";
             temp=temp->next;
         }
+        cout<<temp->data;
         cout<<endl;
     }
 };
