@@ -5,10 +5,11 @@ using namespace std;
 class node{
     public:
         int data;
-        node* next;
+        node* next,* prev;
         node(int data){
             this->data=data;
             next=NULL;
+            prev=NULL;
         }
     //function to create linked list    
     node* insert(node* head,int data){
@@ -27,25 +28,39 @@ class node{
             while(temp->next!=NULL){
                 temp=temp->next;
             }
+            newnode->prev=temp;
             temp->next=newnode;
         }
     return head;
     }
-    //function to insert at beginning
+    //function for insert at beginning
     node* insertatbeginning(node* head,int data){
-        node* newnode=new node(data);
+        node* newnode;
+        newnode=new node(data);
+        if(!newnode){
+            cout<<"error";
+            return head;
+        }
+        newnode->next=NULL;
         if(head==NULL){
             head=newnode;
         }
         else{
             newnode->next=head;
+            head->prev=newnode;
             head=newnode;
         }
-        return head;
+    return head;
     }
-    //function for insertatend
+    //function for insert at end
     node* insertatend(node* head,int data){
-        node* newnode=new node(data);
+        node* newnode;
+        newnode=new node(data);
+        if(!newnode){
+            cout<<"error";
+            return head;
+        }
+        newnode->next=NULL;
         if(head==NULL){
             head=newnode;
         }
@@ -54,56 +69,64 @@ class node{
             while(temp->next!=NULL){
                 temp=temp->next;
             }
+            newnode->prev=temp;
             temp->next=newnode;
         }
-        return head;
+    return head;
     }
-    //function for insertatspecificposition
+    //function for insert at specific position
     node* insertatpos(node* head,int data,int pos){
-        node* newnode=new node(data);
+        node* newnode;
+        newnode=new node(data);
+        if(!newnode){
+            cout<<"error";
+            return head;
+        }
+        newnode->next=NULL;
         if(head==NULL){
             head=newnode;
         }
         else{
-            int i=1;
             node* temp=head;
+            int i=1;
             while(i<pos-1){
                 temp=temp->next;
                 i++;
             }
             newnode->next=temp->next;
+            temp->next->prev=newnode;
+            newnode->prev=temp;
             temp->next=newnode;
         }
-        return head;
+    return head;
     }
-    //function for deletefrombeginning
+    //function to delete from beginning
     node* deletefrombeg(node* head){
         if(head==NULL)
             return NULL;
         else{
             node*temp =head;
             head=head->next;
+            head->prev=NULL;
             free(temp);
         }    
         return head;
     }
-    //function for deleteatend
-    node* deletefromend(node* head){
+    //function to delete from end
+     node* deletefromend(node* head){
         if(head==NULL)
             return NULL;
         else{
-            node* temp =head;
-
-              while(temp->next->next!=NULL){
+           node* temp=head;
+            while(temp->next!=NULL){
                 temp=temp->next;
             }
-            node* prev=temp->next;
-            temp->next=NULL;
-            free(prev);
+            temp->prev->next=NULL;
+            free(temp);
         }    
         return head;
     }
-    //function for deletefrompos
+    //function to delete from specific position
     node* deletefrompos(node* head,int pos){
         if(head==NULL){
             head=NULL;
@@ -116,6 +139,7 @@ class node{
                 i++;
             }
             node* prev=temp->next;
+            temp->next->prev=temp->next;
             temp->next=temp->next->next;
             free(prev);
         }
